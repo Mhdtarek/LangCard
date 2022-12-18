@@ -52,7 +52,7 @@
 <main>
   <Navbar>
     <h3 slot="brand">
-      <a href="#/">{$_("gCard")}</a>
+      <a href="#/">{$_("langCards")}</a>
     </h3>
     <ul class="inline" />
   </Navbar>

@@ -1,9 +1,9 @@
 {
-  "gCard": "كروت ج",
   "play": "العب",
   "createSet": "اصنع مجموعة",
   "nameOfSet": "اسم المجموعة",
   "create": "اصنع",
   "noSets": "!لا يوجد أي مجموعة",
-  "noAccountExists": "!لا يوجد اي حساب"
+  "noAccountExists": "!لا يوجد اي حساب",
+  "langCards": "كروت اللغة"
 }
