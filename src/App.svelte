@@ -1,45 +1,33 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+  import Router from "svelte-spa-router";
+  import { Navbar } from "spaper";
+  import Home from "./routes/Home.svelte";
+  import Learning from "./routes/Learning.svelte";
+  import Set from "./routes/set.svelte";
+  import NotFound from "./routes/NotFound.svelte";
+  import { isAuthenticated } from "./lib/Auth.svelte";
+  import Auth from "./lib/Auth.svelte";
+  const routes = {
+    // Exact path
+    "/": Home,
+
+    // Using named parameters, with last being optional
+    "/learnSet/:userId/:setId": Learning,
+
+    // Wildcard parameter
+    "/Set/:userId/:setId": Set,
+
+    // Catch-all
+    // This is optional, but if present it must be the last
+    "*": NotFound,
+  };
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer"> 
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  {#if $isAuthenticated}
+    <Router {routes} />
+  {/if}
+  {#if !$isAuthenticated}
+    <Auth />
+  {/if}
 </main>
-
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
-</style>
