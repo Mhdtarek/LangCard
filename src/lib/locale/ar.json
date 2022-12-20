@@ -5,5 +5,9 @@
   "create": "اصنع",
   "noSets": "!لا يوجد أي مجموعة",
   "noAccountExists": "!لا يوجد اي حساب",
-  "langCards": "كروت اللغة"
+  "langCards": "كروت اللغة",
+  "nothingToStudy": "!لا شيء للدراسة اليوم!",
+  "study": "ادرس",
+  "studyAnyway": "الدراسة على أي حال",
+  "test": "امتحان"
 }

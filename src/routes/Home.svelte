@@ -33,6 +33,10 @@
     });
   }
 
+  async function goToSet(setId) {
+    location.replace(`${window.location.href}#/set/${$userId}/${setId}`);
+  }
+
   async function createSet() {
     const docRef = doc(db, "users", $userId);
     const colRef = collection(docRef, "sets");
@@ -79,7 +83,9 @@
     <div class="grid container">
       {#each sets as set}
         <Card title={set[0].title} subTitle={set[0].subtitle}>
-          <Button slot="footer">{$_("play")}</Button>
+          <Button slot="footer" on:click={() => goToSet(set[1])}
+            >{$_("play")}</Button
+          >
         </Card>
       {/each}
     </div>

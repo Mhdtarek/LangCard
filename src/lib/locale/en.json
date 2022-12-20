@@ -5,5 +5,9 @@
   "create": "Create",
   "noSets": "There is no groups!",
   "noAccountExists": "No account exists!",
-  "langCards": "Language Cards"
+  "langCards": "Language Cards",
+  "nothingToStudy": "Nothing to study today!",
+  "study": "Study",
+  "test": "Test",
+  "studyAnyway": "Study anyway"
 }

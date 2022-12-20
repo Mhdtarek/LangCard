@@ -5,5 +5,9 @@
   "create": "Skapa",
   "noSets": "Det finns inga Grupper!",
   "noAccountExists": "Inget konto finns!",
-  "langCards": "språkkort"
+  "langCards": "språkkort",
+  "nothingToStudy": "Inget att studera idag!",
+  "study": "Studera",
+  "studyAnyway": "Studera i alla fall",
+  "test": "Testa"
 }
