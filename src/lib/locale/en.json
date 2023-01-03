@@ -9,5 +9,15 @@
   "nothingToStudy": "Nothing to study today!",
   "study": "Study",
   "test": "Test",
-  "studyAnyway": "Study anyway"
+  "studyAnyway": "Study anyway",
+  "addCard": "Add a Card",
+  "goBack": "Go back",
+  "front": "front",
+  "back": "back",
+  "howMuchDoYouKnowTheCard": "do you know the card?",
+  "dir": "ltr",
+  "iDontKnowTheCard": "I don't Know the Card",
+  "iKindOfKnowTheCard": "i Kind Of Know The Card",
+  "iKnowTheCard": "I know the card",
+  "add": "Add"
 }

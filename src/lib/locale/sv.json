@@ -9,5 +9,15 @@
   "nothingToStudy": "Inget att studera idag!",
   "study": "Studera",
   "studyAnyway": "Studera i alla fall",
-  "test": "Testa"
+  "test": "Testa",
+  "addCard": "Lägg till ett kort",
+  "goBack": "Gå tillbaka",
+  "howMuchDoYouKnowTheCard": "Hur mycket känner du till kortet?",
+  "back": "Bak",
+  "front": "fram",
+  "dir": "ltr",
+  "iDontKnowTheCard": "Jag känner inte till kortet",
+  "iKindOfKnowTheCard": "Jag känner typ av kortet",
+  "iKnowTheCard": "Jag kan kortet",
+  "add": "Lägg till"
 }

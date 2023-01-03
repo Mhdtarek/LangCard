@@ -1,8 +1,21 @@
 <script>
   import { Navbar, Button, Card } from "spaper";
   import { _ } from "svelte-i18n";
+  import { initializeApp, getApps, getApp } from "firebase/app";
+  import { firebaseConfig } from "../lib/firebaseConfig.svelte";
+  import {
+    getFirestore,
+    doc,
+    addDoc,
+    getDoc,
+    collection,
+    getDocs,
+  } from "firebase/firestore";
+  export let params = {};
+  const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  const db = getFirestore(app);
 
-  export const perms = {};
+  let cards = [];
 
   let nothingToStudy = false;
 
@@ -17,6 +30,31 @@
 
     return homeUrl;
   }
+
+  function createCards() {
+    let Url = "";
+
+    if (window.location.hostname == "127.0.0.1") {
+      Url = `http://127.0.0.1:5173/#/createCards/${params.userId}/${params.setId}`;
+    } else if (window.location.hostname == "langcards.vercel.app") {
+      Url = `https://langcards.vercel.app/#/createCards/${params.userId}/${params.setId}`;
+    }
+
+    window.location.replace(Url);
+  }
+
+  async function getSet() {
+    const docRef = doc(db, "users", params.userId);
+    const colRef = doc(docRef, "sets", params.setId);
+    const docSnap = await getDoc(colRef);
+    if (docSnap.exists()) {
+      let set = docSnap.data();
+      console.log("Document data:", docSnap.data());
+      cards = [...cards, ...set.Cards];
+    }
+  }
+
+  getSet();
 </script>
 
 <main>
@@ -41,25 +79,27 @@
   </div>
 
   <div class="container cards-container" style="margin-top: 20px;">
-    <div class="padding border border-3">
-      <div class="padding border-down">test</div>
-      <div class="padding">test</div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="padding border border-5 grid-center background-primary">
+      <Button on:click={createCards} block>{$_("addCard")}</Button>
     </div>
-    <div class="padding border border-3">
-      <div class="padding border-down">test</div>
-      <div class="padding">test</div>
-    </div>
-    <div class="padding border border-3">
-      <div class="padding border-down">test</div>
-      <div class="padding">test</div>
-    </div>
+    {#each cards as card}
+      <div class="padding border border-3">
+        <div class="padding border-down">{card.front}</div>
+        <div class="padding">{card.back}</div>
+      </div>
+    {/each}
   </div>
 
-  {perms}
+  {JSON.stringify(params)}
 </main>
 
 <style>
-  .center-text {
+  .grid-center {
+    display: grid;
+    place-items: center;
+  }
+  .add-card-center {
     text-align: center;
   }
   .border-down {

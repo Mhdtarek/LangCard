@@ -2,7 +2,6 @@
   import { Button, Card, Navbar, Modal, Input } from "spaper";
   import { firebaseConfig } from "../lib/firebaseConfig.svelte";
   import { initializeApp, getApps, getApp } from "firebase/app";
-  import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
   import { userId, userName, userLanguage } from "../lib/Auth.svelte";
   import {
     getFirestore,

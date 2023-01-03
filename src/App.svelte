@@ -1,12 +1,14 @@
 <script>
+  import { isAuthenticated } from "./lib/Auth.svelte";
   import Router from "svelte-spa-router";
   import { Navbar } from "spaper";
   import Home from "./routes/Home.svelte";
   import Learning from "./routes/Learning.svelte";
   import Set from "./routes/set.svelte";
   import NotFound from "./routes/NotFound.svelte";
-  import { isAuthenticated } from "./lib/Auth.svelte";
   import Auth from "./lib/Auth.svelte";
+  import createCards from "./routes/createCards.svelte";
+  import { _ } from "svelte-i18n";
   const routes = {
     // Exact path
     "/": Home,
@@ -17,6 +19,7 @@
     // Wildcard parameter
     "/Set/:userId/:setId": Set,
 
+    "/createCards/:userId/:setId": createCards,
     // Catch-all
     // This is optional, but if present it must be the last
     "*": NotFound,
@@ -25,7 +28,9 @@
 
 <main>
   {#if $isAuthenticated}
-    <Router {routes} />
+    <div dir={$_("dir")}>
+      <Router {routes} />
+    </div>
   {/if}
   {#if !$isAuthenticated}
     <Auth />

@@ -9,5 +9,15 @@
   "nothingToStudy": "Rien à étudier aujourd'hui !",
   "study": "Étudier",
   "studyAnyway": "Étudier",
-  "test": "Test"
+  "test": "Test",
+  "addCard": "Ajouter une carte",
+  "goBack": "Retourner",
+  "howMuchDoYouKnowTheCard": "Connaissez-vous la carte ?",
+  "back": "arrière",
+  "front": "de face",
+  "dir": "ltr",
+  "iDontKnowTheCard": "Je ne connais pas la carte",
+  "iKindOfKnowTheCard": "Je connais un peu la carte",
+  "iKnowTheCard": "je connais la carte",
+  "add": "Ajouter"
 }

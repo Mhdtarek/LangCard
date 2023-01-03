@@ -9,5 +9,15 @@
   "nothingToStudy": "!لا شيء للدراسة اليوم!",
   "study": "ادرس",
   "studyAnyway": "الدراسة على أي حال",
-  "test": "امتحان"
+  "test": "امتحان",
+  "addCard": "اصنع كرت",
+  "goBack": "ارجع",
+  "howMuchDoYouKnowTheCard": "كم تعرف الكرت؟",
+  "back": "ورى",
+  "front": "أمام",
+  "iKnowTheCard": "أنا أعرف الكرت",
+  "iKindOfKnowTheCard": "نوع من ما اعرف الكرت",
+  "iDontKnowTheCard": "لا أعرف الكرت",
+  "dir": "rtl",
+  "add": "ضيف"
 }
