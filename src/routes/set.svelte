@@ -99,9 +99,7 @@
     display: grid;
     place-items: center;
   }
-  .add-card-center {
-    text-align: center;
-  }
+
   .border-down {
     border-bottom: 1px solid #41403e;
   }

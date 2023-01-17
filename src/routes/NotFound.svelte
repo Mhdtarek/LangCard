@@ -1,5 +1,5 @@
 <script>
-  window.location.assign("/");
+  window.location.assign("/#/");
 </script>
 
 <main>

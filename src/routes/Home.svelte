@@ -60,13 +60,12 @@
 
     const qSnap = await addDoc(colRef, {
       title: newSetName,
-      subtitle: "Qsnap",
+      cards: [],
     });
-    console.log(qSnap.id);
-
-    sets = [...sets, [{ title: newSetName, subtitle: "Qsnap" }, qSnap.id]];
+    sets = [...sets, [{ title: newSetName, cards: {} }, qSnap.id]];
   }
 
+  locale.set($userLanguage);
   getSets();
 </script>
 
@@ -94,7 +93,7 @@
   </div>
 
   <body>
-    {#if sets == false}
+    {#if Boolean(sets) == false}
       <p class="text-center italic">{$_("noSets")}</p>
     {/if}
     <div class="grid container">

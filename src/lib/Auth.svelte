@@ -11,13 +11,14 @@
 </script>
 
 <script>
-  isAuthenticated.set(false);
   import { Button, Select, Alert } from "spaper";
   import { firebaseConfig } from "../lib/firebaseConfig.svelte";
   import { initializeApp, getApps, getApp } from "firebase/app";
   import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
   import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
   import { locale } from "svelte-i18n";
+
+  isAuthenticated.set(false);
 
   let hasSignedUp = false;
   let Language = "";

@@ -3,13 +3,13 @@
   import { _ } from "svelte-i18n";
   import { initializeApp, getApps, getApp } from "firebase/app";
   import { firebaseConfig } from "../lib/firebaseConfig.svelte";
+  import { userId, userEmail } from "../lib/Auth.svelte";
   import {
     getFirestore,
     doc,
-    addDoc,
-    getDoc,
     collection,
-    getDocs,
+    updateDoc,
+    getDoc,
   } from "firebase/firestore";
 
   export let params = {};
@@ -17,8 +17,11 @@
   const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
   const db = getFirestore(app);
 
-  let CardType = "";
-
+  let cardType = "";
+  let cardsCreated = [];
+  let cards = [];
+  let front = "";
+  let back = "";
   function goBack() {
     let Url = "";
 
@@ -30,6 +33,47 @@
 
     return Url;
   }
+
+  async function createCard() {
+    if (front == "") return;
+    if (back == "") return;
+    if (cardType == "") return;
+
+    const docRef = doc(db, "users", params.userId);
+    const colRef = doc(docRef, "sets", params.setId);
+
+    const qSnap = await updateDoc(colRef, {
+      Cards: [
+        ...cards,
+        {
+          front,
+          back,
+          cardType,
+        },
+      ],
+    });
+
+    console.log("updated, Qsnap: ", qSnap);
+    cardsCreated = [...cardsCreated, { front, back, cardType }];
+    console.log("cardsCreated: ", cardsCreated);
+
+    front = "";
+    back = "";
+    cardType = "";
+  }
+
+  async function getSet() {
+    const docRef = doc(db, "users", params.userId);
+    const colRef = doc(docRef, "sets", params.setId);
+    const docSnap = await getDoc(colRef);
+    if (docSnap.exists()) {
+      let set = docSnap.data();
+      console.log("Document data:", docSnap.data());
+      cards = [...cards, ...set.Cards];
+    }
+  }
+
+  getSet();
 </script>
 
 <main>
@@ -57,13 +101,23 @@
   </Navbar>
   <div class="container margin-top-small">
     <div class="row">
-      <Input class="col-6 s-12" type="textarea" placeholder={$_("front")} />
-      <Input class="col-6 s-12" type="textarea" placeholder={$_("back")} />
+      <Input
+        bind:value={front}
+        class="col-6 s-12"
+        type="textarea"
+        placeholder={$_("front")}
+      />
+      <Input
+        bind:value={back}
+        class="col-6 s-12"
+        type="textarea"
+        placeholder={$_("back")}
+      />
     </div>
 
     <div class="row">
       <div class="padding border border-5 grid-center col-6 col">
-        <Button block>{$_("add")}</Button>
+        <Button on:click={createCard} block>{$_("add")}</Button>
       </div>
 
       <div class="col-6 col padding border border-5 grid-center">
@@ -72,20 +126,33 @@
           <Radio
             value="Known"
             label={$_("iKnowTheCard")}
-            bind:group={CardType}
+            bind:group={cardType}
           />
           <Radio
             value="Kinda"
             label={$_("iKindOfKnowTheCard")}
-            bind:group={CardType}
+            bind:group={cardType}
           />
           <Radio
             value="Unknown"
             label={$_("iDontKnowTheCard")}
-            bind:group={CardType}
+            bind:group={cardType}
           />
         </fieldset>
       </div>
+    </div>
+    <div class="cards-container" style="margin-top: 20px;">
+      {#each cardsCreated as createdCard}
+        <div
+          class="padding border border-3"
+          class:background-success={createdCard.cardType == "Known"}
+          class:background-warning={createdCard.cardType == "Kinda"}
+          class:background-danger={createdCard.cardType == "Unknown"}
+        >
+          <div class="padding border-down">{createdCard.front}</div>
+          <div class="padding">{createdCard.back}</div>
+        </div>
+      {/each}
     </div>
   </div>
 </main>
@@ -94,5 +161,22 @@
   .grid-center {
     display: grid;
     place-items: center;
+  }
+
+  .border-down {
+    border-bottom: 1px solid #41403e;
+  }
+
+  .cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+  }
+  @media screen and (max-width: 600px) {
+    .cards-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
   }
 </style>
