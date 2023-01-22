@@ -1,59 +1,137 @@
 <script>
   import { Button } from "spaper";
-  import { _ } from "svelte-i18n";
+  import { number, _ } from "svelte-i18n";
 
   export const params = {};
-  let unknownQuestion = [{ front: "front", back: "back" }];
+  let unknownQuestion = [
+    { front: "front", back: "back", cardType: "unknown" },
+    { front: "front", back: "back", cardType: "unknown" },
+  ];
   let kindaKnownQuestion = [];
   let knownQuestion = [];
-  let question = "No Card found!!";
-  let answer = "No Card found!!";
+
+  let currentCard = {
+    front: "",
+    back: "",
+    posInArray: 0,
+    cardType: "",
+  };
+
   let cardsDone = 0;
   let answerType = "";
 
   let answerMode = false;
-
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-  }
 
   function generateQuestion() {
     // checks if there is any question that is unknown
     if (unknownQuestion.length != 0) {
       // let question = ""
 
-      let qFrom = 0;
-      let qTo = unknownQuestion.length - 1;
+      let generateCard = Math.floor(Math.random() * unknownQuestion.length);
+      let cardPosinArray = unknownQuestion[generateCard];
+      answerMode = false;
 
-      question = unknownQuestion[getRandomInt(qFrom, qTo)].front;
-      answer = unknownQuestion[getRandomInt(qFrom, qTo)].back;
+      currentCard = {
+        front: cardPosinArray.front,
+        back: cardPosinArray.back,
+        posInArray: generateCard,
+        cardType: "unknown",
+      };
 
-      return;
+      return cardPosinArray;
       // return question
     }
-  }
 
+    if (kindaKnownQuestion.length != 0) {
+      let generateCard = Math.floor(Math.random() * kindaKnownQuestion.length);
+      let cardPosinArray = kindaKnownQuestion[generateCard];
+      answerMode = false;
+
+      currentCard = {
+        front: cardPosinArray.front,
+        back: cardPosinArray.back,
+        posInArray: generateCard,
+        cardType: "kinda",
+      };
+
+      return cardPosinArray;
+      // return question
+    }
+
+    if (knownQuestion.length != 0) {
+      let generateCard = Math.floor(Math.random() * knownQuestion.length);
+      let cardPosinArray = knownQuestion[generateCard];
+      answerMode = false;
+
+      currentCard = {
+        front: cardPosinArray.front,
+        back: cardPosinArray.back,
+        posInArray: generateCard,
+        cardType: "known",
+      };
+
+      return cardPosinArray;
+      // returns the question
+    }
+  }
+  /*
   function answered(answer, typeAnswered, positionInArray) {
     switch (answer) {
       case "unknown":
         switch (typeAnswered) {
           case "unknown":
+            cardsDone++;
+            generateQuestion();
+            console.log(currentCard);
             break;
           case "kinda":
-            // code block
+            delete unknownQuestion[positionInArray];
+            kindaKnownQuestion = [...kindaKnownQuestion, currentCard];
+            cardsDone++;
+            generateQuestion();
+            console.log(positionInArray);
             break;
           case "known":
-            // code block
+            unknownQuestion.splice(positionInArray, 1);
+            knownQuestion.push(currentCard);
+            cardsDone++;
+            generateQuestion();
             break;
           default:
-            console.error("How did we get here?, did you type something wrong");
-            console.error("error: you wrote the wrong code block");
+            console.error(
+              "How did we get here?, did you type something wrong!??"
+            );
+            console.error(
+              "error: you wrote the wrong code block at the function 'answered' unknown block"
+            );
         }
         break;
       case "kinda":
-        // code block
+        switch (typeAnswered) {
+          case "unknown":
+            kindaKnownQuestion.splice(positionInArray, 1);
+            unknownQuestion.push(currentCard);
+            cardsDone++;
+            generateQuestion();
+            break;
+          case "kinda":
+            cardsDone++;
+            generateQuestion();
+            break;
+          case "known":
+            kindaKnownQuestion.splice(positionInArray, 1);
+            knownQuestion.push(currentCard);
+            cardsDone++;
+            generateQuestion();
+            break;
+          default:
+            console.error(
+              "How did we get here?, did you type something wrong!??"
+            );
+            console.error(
+              "error: you wrote the wrong code block at the function 'answered' unknown block"
+            );
+        }
         break;
       case "known":
         // code block
@@ -63,6 +141,48 @@
         console.error(
           "error: you wrote the wrong code block, at answered somewhere"
         );
+    }
+  }
+  */
+  function unknownQuestionBtn(cardType) {
+    if (cardType == "unknown") {
+      let card = currentCard;
+      unknownQuestion.splice(card.posInArray, 1);
+      kindaKnownQuestion.push(card);
+      cardsDone++;
+      generateQuestion();
+    }
+
+    if (cardType == "kinda") {
+      cardsDone++;
+      generateQuestion();
+    }
+    if (cardType == "known") {
+      unknownQuestion.splice(currentCard.posInArray, 1);
+      knownQuestion.push(currentCard);
+      cardsDone++;
+      generateQuestion();
+    }
+  }
+
+  function kindaKnowBtn(cardType) {
+    if (cardType == "unknown") {
+      let card = currentCard;
+      unknownQuestion.splice(card.posInArray, 1);
+      kindaKnownQuestion.push(card);
+      cardsDone++;
+      generateQuestion();
+    }
+
+    if (cardType == "kinda") {
+      cardsDone++;
+      generateQuestion();
+    }
+    if (cardType == "known") {
+      unknownQuestion.splice(currentCard.posInArray, 1);
+      knownQuestion.push(currentCard);
+      cardsDone++;
+      generateQuestion();
     }
   }
 
@@ -93,7 +213,7 @@
 
   {#if answerMode == false}
     <div>
-      <h4 class="mainQn">{question}</h4>
+      <h4 class="mainQn">{currentCard.front}</h4>
     </div>
     <div class="putAtBottom">
       <div class="buttonBottom">
@@ -104,18 +224,25 @@
 
   {#if answerMode == true}
     <div>
-      <h4 class="mainQn">{answer}</h4>
-      <div
-        class="putAtBottom🎶 adabooodo
-      "
-      >
-        <Button>I don't know</Button>
-        <Button>kind of know</Button>
-        <Button>I know</Button>
-        <Button>skip</Button>
+      <h4 class="mainQn">{currentCard.back}</h4>
+      <div class="putAtBottom">
+        <Button on:click={() => generateQuestion()}>I don't know</Button>
+        <Button on:click={() => kindaKnowBtn(currentCard.cardType)}
+          >kind of know</Button
+        >
+        <Button on:click={() => generateQuestion()}>I know</Button>
       </div>
     </div>
   {/if}
+  <Button
+    on:click={() =>
+      console.log({
+        unknownQuestion,
+        kindaKnownQuestion,
+        knownQuestion,
+        currentCard,
+      })}
+  />
 </main>
 
 <style>
