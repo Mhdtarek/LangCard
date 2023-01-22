@@ -19,5 +19,10 @@
   "iKindOfKnowTheCard": "نوع من ما اعرف الكرت",
   "iDontKnowTheCard": "لا أعرف الكرت",
   "dir": "rtl",
-  "add": "ضيف"
+  "add": "ضيف",
+  "cardsDone": ":الكروت المنجزة",
+  "showAnswer": "فرجي الجواب",
+  "close": "سكر",
+  "finished": "خلصط",
+  "finishedModal": "لقد انتهيت من التعلم (جميع الكروت معروفة)"
 }

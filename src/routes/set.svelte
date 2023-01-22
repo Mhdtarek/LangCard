@@ -43,6 +43,18 @@
     window.location.replace(Url);
   }
 
+  function studyCards() {
+    let Url = "";
+
+    if (window.location.hostname == "127.0.0.1") {
+      Url = `http://127.0.0.1:5173/#/learnSet/${params.userId}/${params.setId}`;
+    } else if (window.location.hostname == "langcards.vercel.app") {
+      Url = `https://langcards.vercel.app/#/learnSet/${params.userId}/${params.setId}`;
+    }
+
+    window.location.replace(Url);
+  }
+
   async function getSet() {
     const docRef = doc(db, "users", params.userId);
     const colRef = doc(docRef, "sets", params.setId);
@@ -68,8 +80,10 @@
     class="border border-6 container padding padding-4 margin-top background-secondary row"
   >
     {#if !nothingToStudy}
-      <div class="col col-6 "><Button block>{$_("study")}</Button></div>
-      <div class="col col-6 "><Button block>{$_("test")}</Button></div>
+      <div class="col col-6 ">
+        <Button on:click={studyCards} block>{$_("study")}</Button>
+      </div>
+      <div class="col col-6 "><Button disabled block>{$_("test")}</Button></div>
     {/if}
     {#if nothingToStudy}
       <h3 class="center-text col-12">{$_("nothingToStudy")}</h3>
@@ -90,8 +104,6 @@
       </div>
     {/each}
   </div>
-
-  {JSON.stringify(params)}
 </main>
 
 <style>

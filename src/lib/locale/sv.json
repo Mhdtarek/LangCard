@@ -19,5 +19,10 @@
   "iDontKnowTheCard": "Jag känner inte till kortet",
   "iKindOfKnowTheCard": "Jag känner typ av kortet",
   "iKnowTheCard": "Jag kan kortet",
-  "add": "Lägg till"
+  "add": "Lägg till",
+  "cardsDone": "Gjorda kort:",
+  "showAnswer": "Visa svaret",
+  "close": "Stäng",
+  "finished": "Färdig",
+  "finishedModal": "Du èr klar med att lära dig (alla kort är kända)"
 }

@@ -19,5 +19,10 @@
   "iDontKnowTheCard": "Je ne connais pas la carte",
   "iKindOfKnowTheCard": "Je connais un peu la carte",
   "iKnowTheCard": "je connais la carte",
-  "add": "Ajouter"
+  "add": "Ajouter",
+  "cardsDone": "Cartes faites :",
+  "showAnswer": "Montrer la réponse",
+  "close": "Fermer",
+  "finished": "Finir",
+  "finishedModal": "Vous avez terminé l'apprentissage (toutes les cartes sont connues)"
 }

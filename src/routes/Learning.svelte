@@ -1,14 +1,28 @@
 <script>
-  import { Button } from "spaper";
+  import { Button, Modal } from "spaper";
   import { number, _ } from "svelte-i18n";
+  import {
+    getFirestore,
+    doc,
+    addDoc,
+    getDoc,
+    collection,
+    getDocs,
+  } from "firebase/firestore";
+  import { firebaseConfig } from "../lib/firebaseConfig.svelte";
+  import { initializeApp, getApps, getApp } from "firebase/app";
 
-  export const params = {};
-  let unknownQuestion = [
-    { front: "front", back: "back", cardType: "unknown" },
-    { front: "front", back: "back", cardType: "unknown" },
-  ];
+  export let params = {};
+
+  let unknownQuestion = [];
   let kindaKnownQuestion = [];
   let knownQuestion = [];
+
+  let totalCardsNumber =
+    unknownQuestion.length + kindaKnownQuestion.length + knownQuestion.length;
+
+  const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  const db = getFirestore(app);
 
   let currentCard = {
     front: "",
@@ -18,9 +32,19 @@
   };
 
   let cardsDone = 0;
-  let answerType = "";
-
   let answerMode = false;
+
+  function goBack() {
+    let Url = "";
+
+    if (window.location.hostname == "127.0.0.1") {
+      Url = `http://127.0.0.1:5173/#/set/${params.userId}/${params.setId}`;
+    } else if (window.location.hostname == "langcards.vercel.app") {
+      Url = `https://langcards.vercel.app/#/set/${params.userId}/${params.setId}`;
+    }
+
+    window.location.replace(Url);
+  }
 
   function generateQuestion() {
     // checks if there is any question that is unknown
@@ -38,6 +62,8 @@
         cardType: "unknown",
       };
 
+      console.log({ unknownQuestion, kindaKnownQuestion, knownQuestion });
+
       return cardPosinArray;
       // return question
     }
@@ -53,6 +79,8 @@
         posInArray: generateCard,
         cardType: "kinda",
       };
+
+      console.log({ unknownQuestion, kindaKnownQuestion, knownQuestion });
 
       return cardPosinArray;
       // return question
@@ -70,96 +98,30 @@
         cardType: "known",
       };
 
+      console.log({ unknownQuestion, kindaKnownQuestion, knownQuestion });
+
       return cardPosinArray;
       // returns the question
     }
   }
-  /*
-  function answered(answer, typeAnswered, positionInArray) {
-    switch (answer) {
-      case "unknown":
-        switch (typeAnswered) {
-          case "unknown":
-            cardsDone++;
-            generateQuestion();
-            console.log(currentCard);
-            break;
-          case "kinda":
-            delete unknownQuestion[positionInArray];
-            kindaKnownQuestion = [...kindaKnownQuestion, currentCard];
-            cardsDone++;
-            generateQuestion();
-            console.log(positionInArray);
-            break;
-          case "known":
-            unknownQuestion.splice(positionInArray, 1);
-            knownQuestion.push(currentCard);
-            cardsDone++;
-            generateQuestion();
-            break;
-          default:
-            console.error(
-              "How did we get here?, did you type something wrong!??"
-            );
-            console.error(
-              "error: you wrote the wrong code block at the function 'answered' unknown block"
-            );
-        }
-        break;
-      case "kinda":
-        switch (typeAnswered) {
-          case "unknown":
-            kindaKnownQuestion.splice(positionInArray, 1);
-            unknownQuestion.push(currentCard);
-            cardsDone++;
-            generateQuestion();
-            break;
-          case "kinda":
-            cardsDone++;
-            generateQuestion();
-            break;
-          case "known":
-            kindaKnownQuestion.splice(positionInArray, 1);
-            knownQuestion.push(currentCard);
-            cardsDone++;
-            generateQuestion();
-            break;
-          default:
-            console.error(
-              "How did we get here?, did you type something wrong!??"
-            );
-            console.error(
-              "error: you wrote the wrong code block at the function 'answered' unknown block"
-            );
-        }
-        break;
-      case "known":
-        // code block
-        break;
-      default:
-        console.error("How did we get here?, did you type something wrong");
-        console.error(
-          "error: you wrote the wrong code block, at answered somewhere"
-        );
-    }
-  }
-  */
-  function unknownQuestionBtn(cardType) {
+
+  function unknownKnowBtn(cardType) {
     if (cardType == "unknown") {
-      let card = currentCard;
-      unknownQuestion.splice(card.posInArray, 1);
-      kindaKnownQuestion.push(card);
       cardsDone++;
       generateQuestion();
     }
 
     if (cardType == "kinda") {
+      let card = currentCard;
+      kindaKnownQuestion.splice(card.posInArray, 1);
+      unknownQuestion.push(card);
       cardsDone++;
       generateQuestion();
     }
+
     if (cardType == "known") {
-      unknownQuestion.splice(currentCard.posInArray, 1);
-      knownQuestion.push(currentCard);
+      knownQuestion.splice(currentCard.posInArray, 1);
+      unknownQuestion.push(currentCard);
       cardsDone++;
       generateQuestion();
     }
@@ -178,20 +140,75 @@
       cardsDone++;
       generateQuestion();
     }
+
     if (cardType == "known") {
-      unknownQuestion.splice(currentCard.posInArray, 1);
-      knownQuestion.push(currentCard);
+      knownQuestion.splice(currentCard.posInArray, 1);
+      kindaKnownQuestion.push(currentCard);
       cardsDone++;
       generateQuestion();
     }
   }
 
-  generateQuestion();
+  function KnownBtn(cardType) {
+    if (cardType == "kinda") {
+      let card = currentCard;
+      kindaKnownQuestion.splice(card.posInArray, 1);
+      knownQuestion.push(card);
+      cardsDone++;
+      generateQuestion();
+    }
+
+    if (cardType == "known") {
+      cardsDone++;
+      generateQuestion();
+    }
+
+    if (cardType == "unknown") {
+      unknownQuestion.splice(currentCard.posInArray, 1);
+      knownQuestion.push(currentCard);
+      cardsDone++;
+      generateQuestion();
+    }
+
+    if (totalCardsNumber == knownQuestion.length) {
+      const modal = Modal.open({
+        title: $_("finished"),
+        content: $_("finishedModal"),
+      });
+      // Close programmatically
+      setTimeout(modal.close, 2000);
+    }
+
+    console.log(knownQuestion.length);
+  }
+
+  async function getSet() {
+    const docRef = doc(db, "users", params.userId);
+    const colRef = doc(docRef, "sets", params.setId);
+    const docSnap = await getDoc(colRef);
+    if (docSnap.exists()) {
+      let set = docSnap.data();
+      let cards = set.Cards;
+      console.log("Document data:", docSnap.data());
+      unknownQuestion = cards.filter((card) => card.cardType == "Unknown");
+      kindaKnownQuestion = cards.filter((card) => card.cardType == "Kinda");
+      knownQuestion = cards.filter((card) => card.cardType == "Known");
+
+      totalCardsNumber =
+        unknownQuestion.length +
+        kindaKnownQuestion.length +
+        knownQuestion.length;
+    }
+    generateQuestion();
+  }
+
+  getSet();
 </script>
 
 <main>
   <div class="navigation">
-    <Button size="small">
+    <!--Close/goback btn -->
+    <Button size="small" on:click={goBack}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -208,7 +225,7 @@
         />
       </svg>
     </Button>
-    <span class="right">cards done: {cardsDone}</span>
+    <span class="right">{$_("cardsDone")} {cardsDone}</span>
   </div>
 
   {#if answerMode == false}
@@ -217,7 +234,9 @@
     </div>
     <div class="putAtBottom">
       <div class="buttonBottom">
-        <Button on:click={() => (answerMode = true)} block>Show answer</Button>
+        <Button on:click={() => (answerMode = true)} block
+          >{$_("showAnswer")}</Button
+        >
       </div>
     </div>
   {/if}
@@ -226,23 +245,18 @@
     <div>
       <h4 class="mainQn">{currentCard.back}</h4>
       <div class="putAtBottom">
-        <Button on:click={() => generateQuestion()}>I don't know</Button>
-        <Button on:click={() => kindaKnowBtn(currentCard.cardType)}
-          >kind of know</Button
+        <Button on:click={() => unknownKnowBtn(currentCard.cardType)}
+          >{$_("iDontKnowTheCard")}</Button
         >
-        <Button on:click={() => generateQuestion()}>I know</Button>
+        <Button on:click={() => kindaKnowBtn(currentCard.cardType)}
+          >{$_("iKindOfKnowTheCard")}</Button
+        >
+        <Button on:click={() => KnownBtn(currentCard.cardType)}
+          >{$_("iKnowTheCard")}</Button
+        >
       </div>
     </div>
   {/if}
-  <Button
-    on:click={() =>
-      console.log({
-        unknownQuestion,
-        kindaKnownQuestion,
-        knownQuestion,
-        currentCard,
-      })}
-  />
 </main>
 
 <style>

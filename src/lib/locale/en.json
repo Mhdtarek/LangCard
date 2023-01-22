@@ -19,5 +19,10 @@
   "iDontKnowTheCard": "I don't Know the Card",
   "iKindOfKnowTheCard": "i Kind Of Know The Card",
   "iKnowTheCard": "I know the card",
-  "add": "Add"
+  "add": "Add",
+  "cardsDone": "Cards done:",
+  "showAnswer": "Show Answer",
+  "close": "Close",
+  "finished": "Finished",
+  "finishedModal": "You have finished learning (all cards are known)"
 }
