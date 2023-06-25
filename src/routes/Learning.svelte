@@ -1,14 +1,7 @@
 <script>
   import { Button, Modal } from "spaper";
   import { number, _ } from "svelte-i18n";
-  import {
-    getFirestore,
-    doc,
-    addDoc,
-    getDoc,
-    collection,
-    getDocs,
-  } from "firebase/firestore";
+  import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
   import { firebaseConfig } from "../lib/firebaseConfig.svelte";
   import { initializeApp, getApps, getApp } from "firebase/app";
 
@@ -17,6 +10,7 @@
   let unknownQuestion = [];
   let kindaKnownQuestion = [];
   let knownQuestion = [];
+  let allQuestion = [];
 
   let totalCardsNumber =
     unknownQuestion.length + kindaKnownQuestion.length + knownQuestion.length;
@@ -44,6 +38,8 @@
     }
 
     window.location.replace(Url);
+
+    updateSet();
   }
 
   function generateQuestion() {
@@ -189,6 +185,9 @@
     if (docSnap.exists()) {
       let set = docSnap.data();
       let cards = set.Cards;
+
+      allQuestion = cards;
+
       console.log("Document data:", docSnap.data());
       unknownQuestion = cards.filter((card) => card.cardType == "Unknown");
       kindaKnownQuestion = cards.filter((card) => card.cardType == "Kinda");
@@ -202,13 +201,32 @@
     generateQuestion();
   }
 
+  function resetSet() {
+    unknownQuestion = [
+      ...unknownQuestion,
+      ...kindaKnownQuestion,
+      ...knownQuestion,
+    ];
+    kindaKnownQuestion = [];
+    knownQuestion = [];
+  }
+
+  async function updateSet() {
+    const docRef = doc(db, "userDocs", params.userId);
+    const colRef = doc(docRef, "sets", params.setId);
+
+    await updateDoc(colRef, {
+      Cards: allQuestion,
+    });
+  }
+
   getSet();
 </script>
 
 <main>
   <div class="navigation">
-    <!--Close/goback btn -->
-    <Button size="small" on:click={goBack}>
+    <!--Close btn -->
+    <Button size="small" type="danger" on:click={goBack}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -225,6 +243,8 @@
         />
       </svg>
     </Button>
+    <Button size="small" on:click={resetSet}>{$_("reset")}</Button>
+    <Button size="small" on:click={updateSet}>{$_("update")}</Button>
     <span class="right">{$_("cardsDone")} {cardsDone}</span>
   </div>
 

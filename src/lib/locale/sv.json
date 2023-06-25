@@ -24,5 +24,7 @@
   "showAnswer": "Visa svaret",
   "close": "Stäng",
   "finished": "Färdig",
-  "finishedModal": "Du èr klar med att lära dig (alla kort är kända)"
+  "finishedModal": "Du èr klar med att lära dig (alla kort är kända)",
+  "reset": "Återställ",
+  "update": "Uppdatera"
 }

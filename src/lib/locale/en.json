@@ -24,5 +24,7 @@
   "showAnswer": "Show Answer",
   "close": "Close",
   "finished": "Finished",
-  "finishedModal": "You have finished learning (all cards are known)"
+  "finishedModal": "You have finished learning (all cards are known)",
+  "reset": "Reset",
+  "update": "Update"
 }
