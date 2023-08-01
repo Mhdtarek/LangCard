@@ -124,6 +124,7 @@
   {#if !hasSignedUp}
     <div class="center">
       <div>
+        <h1>LANG CARD</h1>
         <Button on:click={logIn}>Login</Button>
         <Button on:click={signUp}>Sign up</Button>
       </div>
