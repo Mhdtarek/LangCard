@@ -25,8 +25,8 @@
   function goBack() {
     let Url = "";
 
-    if (window.location.hostname == "127.0.0.1") {
-      Url = `http://127.0.0.1:5173/#/set/${params.userId}/${params.setId}`;
+    if (window.location.hostname == "localhost") {
+      Url = `http://localhost:5173/#/set/${params.userId}/${params.setId}`;
     } else if (window.location.hostname == "langcards.vercel.app") {
       Url = `https://langcards.vercel.app/#/createCards/${params.userId}/${params.setId}`;
     }

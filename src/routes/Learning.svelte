@@ -31,8 +31,8 @@
   function goBack() {
     let Url = "";
 
-    if (window.location.hostname == "127.0.0.1") {
-      Url = `http://127.0.0.1:5173/#/set/${params.userId}/${params.setId}`;
+    if (window.location.hostname == "localhost") {
+      Url = `http://localhost:5173/#/set/${params.userId}/${params.setId}`;
     } else if (window.location.hostname == "langcards.vercel.app") {
       Url = `https://langcards.vercel.app/#/set/${params.userId}/${params.setId}`;
     }
@@ -43,63 +43,66 @@
   }
 
   function generateQuestion() {
-    // checks if there is any question that is unknown
-    if (unknownQuestion.length != 0) {
-      // let question = ""
+  let cardFound = false;
 
+  while (!cardFound) {
+    if (unknownQuestion.length > 0) {
       let generateCard = Math.floor(Math.random() * unknownQuestion.length);
-      let cardPosinArray = unknownQuestion[generateCard];
-      answerMode = false;
+      let cardPosInArray = generateCard;
 
       currentCard = {
-        front: cardPosinArray.front,
-        back: cardPosinArray.back,
-        posInArray: generateCard,
+        front: unknownQuestion[cardPosInArray].front,
+        back: unknownQuestion[cardPosInArray].back,
+        posInArray: cardPosInArray,
         cardType: "unknown",
       };
 
+      cardFound = true;
       console.log({ unknownQuestion, kindaKnownQuestion, knownQuestion });
 
-      return cardPosinArray;
-      // return question
+      return currentCard.front; // Return the front of the card
     }
 
-    if (kindaKnownQuestion.length != 0) {
+    if (kindaKnownQuestion.length > 0) {
       let generateCard = Math.floor(Math.random() * kindaKnownQuestion.length);
-      let cardPosinArray = kindaKnownQuestion[generateCard];
-      answerMode = false;
+      let cardPosInArray = generateCard;
 
       currentCard = {
-        front: cardPosinArray.front,
-        back: cardPosinArray.back,
-        posInArray: generateCard,
+        front: kindaKnownQuestion[cardPosInArray].front,
+        back: kindaKnownQuestion[cardPosInArray].back,
+        posInArray: cardPosInArray,
         cardType: "kinda",
       };
 
+      cardFound = true;
       console.log({ unknownQuestion, kindaKnownQuestion, knownQuestion });
 
-      return cardPosinArray;
-      // return question
+      return currentCard.front; // Return the front of the card
     }
 
-    if (knownQuestion.length != 0) {
+    if (knownQuestion.length > 0) {
       let generateCard = Math.floor(Math.random() * knownQuestion.length);
-      let cardPosinArray = knownQuestion[generateCard];
-      answerMode = false;
+      let cardPosInArray = generateCard;
 
       currentCard = {
-        front: cardPosinArray.front,
-        back: cardPosinArray.back,
-        posInArray: generateCard,
+        front: knownQuestion[cardPosInArray].front,
+        back: knownQuestion[cardPosInArray].back,
+        posInArray: cardPosInArray,
         cardType: "known",
       };
 
+      cardFound = true;
       console.log({ unknownQuestion, kindaKnownQuestion, knownQuestion });
 
-      return cardPosinArray;
-      // returns the question
+      return currentCard.front; // Return the front of the card
     }
+
+    // If no cards are available, add logic to handle this scenario
+    // You could add a message or handle it as needed
+    // For example:
+    // return "No cards available.";
   }
+}
 
   function unknownKnowBtn(cardType) {
     if (cardType == "unknown") {

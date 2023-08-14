@@ -23,8 +23,8 @@
   function goHome() {
     let homeUrl = "";
 
-    if (window.location.hostname == "127.0.0.1") {
-      homeUrl = "http://127.0.0.1:5173/#/";
+    if (window.location.hostname == "localhost") {
+      homeUrl = "http://localhost:5173/#/";
     } else if (window.location.hostname == "langcards.vercel.app") {
       homeUrl = "https://langcards.vercel.app/#/";
     }
@@ -45,8 +45,8 @@
   }
 
   async function goToSet(setId) {
-    if (window.location.hostname == "127.0.0.1") {
-      location.replace(`http://127.0.0.1:5173/#/set/${$userId}/${setId}`);
+    if (window.location.hostname == "localhost") {
+      location.replace(`http://localhost:5173/#/set/${$userId}/${setId}`);
     } else if (window.location.hostname == "langcards.vercel.app") {
       location.replace(
         `https://langcards.vercel.app/#/set/${$userId}/${setId}`

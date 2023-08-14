@@ -22,8 +22,8 @@
   function goHome() {
     let homeUrl = "";
 
-    if (window.location.hostname == "127.0.0.1") {
-      homeUrl = "http://127.0.0.1:5173/#/";
+    if (window.location.hostname == "localhost") {
+      homeUrl = "http://localhost:5173/#/";
     } else if (window.location.hostname == "langcards.vercel.app") {
       homeUrl = "https://langcards.vercel.app/#/";
     }
@@ -34,8 +34,8 @@
   function createCards() {
     let Url = "";
 
-    if (window.location.hostname == "127.0.0.1") {
-      Url = `http://127.0.0.1:5173/#/createCards/${params.userId}/${params.setId}`;
+    if (window.location.hostname == "localhost") {
+      Url = `http://localhost:5173/#/createCards/${params.userId}/${params.setId}`;
     } else if (window.location.hostname == "langcards.vercel.app") {
       Url = `https://langcards.vercel.app/#/createCards/${params.userId}/${params.setId}`;
     }
@@ -46,8 +46,8 @@
   function studyCards() {
     let Url = "";
 
-    if (window.location.hostname == "127.0.0.1") {
-      Url = `http://127.0.0.1:5173/#/learnSet/${params.userId}/${params.setId}`;
+    if (window.location.hostname == "localhost") {
+      Url = `http://localhost:5173/#/learnSet/${params.userId}/${params.setId}`;
     } else if (window.location.hostname == "langcards.vercel.app") {
       Url = `https://langcards.vercel.app/#/learnSet/${params.userId}/${params.setId}`;
     }
@@ -97,12 +97,17 @@
     <div class="padding border border-5 grid-center background-primary">
       <Button on:click={createCards} block>{$_("addCard")}</Button>
     </div>
-    {#each cards as card}
-      <div class="padding border border-3">
-        <div class="padding border-down">{card.front}</div>
-        <div class="padding">{card.back}</div>
-      </div>
-    {/each}
+      {#each cards as createdCard}
+        <div
+          class="padding border border-3"
+          class:background-success={createdCard.cardType == "Known"}
+          class:background-warning={createdCard.cardType == "Kinda"}
+          class:background-danger={createdCard.cardType == "Unknown"}
+        >
+          <div class="padding border-down">{createdCard.front}</div>
+          <div class="padding">{createdCard.back}</div>
+        </div>
+      {/each}
   </div>
 </main>
 
