@@ -1,5 +1,9 @@
-# Svelte + Vite
+# Lang card
 
+pretty simple flash card app
+
+boilerplate
+---
 This template should help get you started developing with Svelte in Vite.
 
 ## Recommended IDE Setup
